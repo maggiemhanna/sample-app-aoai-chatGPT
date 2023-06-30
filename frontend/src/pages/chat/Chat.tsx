@@ -69,9 +69,9 @@ const Chat = () => {
                 while (true) {
                     const {done, value} = await reader.read();
                     if (done) break;
-
                     var text = new TextDecoder("utf-8").decode(value);
                     const objects = text.split("\n");
+                    console.log(objects)
                     objects.forEach((obj) => {
                         try {
                             runningText += obj;
@@ -84,6 +84,7 @@ const Chat = () => {
                     });
                 }
                 setAnswers([...answers, userMessage, ...result.choices[0].messages]);
+                console.log(result.choices[0].messages);
             }
             
         } catch ( e )  {

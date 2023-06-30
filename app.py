@@ -3,8 +3,30 @@ import os
 import logging
 import requests
 import openai
+import azure.search.documents
+import re
+from html import unescape
 from flask import Flask, Response, request, jsonify
 from dotenv import load_dotenv
+from azure.core.credentials import AzureKeyCredential
+from azure.search.documents import SearchClient  
+from azure.search.documents.indexes import SearchIndexClient  
+#from azure.search.documents.models import Vector  
+from azure.search.documents.indexes.models import (  
+    SearchIndex,  
+    SearchField,  
+    SearchFieldDataType,  
+    SimpleField,  
+    SearchableField,  
+    SearchIndex,  
+    SemanticConfiguration,  
+    PrioritizedFields,  
+    SemanticField,  
+    SearchField,  
+    SemanticSettings  
+#    VectorSearch,  
+#    VectorSearchAlgorithmConfiguration,  
+)
 
 load_dotenv()
 
@@ -16,6 +38,7 @@ def static_file(path):
     return app.send_static_file(path)
 
 # ACS Integration Settings
+AZURE_SEARCH_SERVICE_ENDPOINT = os.environ.get("AZURE_SEARCH_SERVICE_ENDPOINT")
 AZURE_SEARCH_SERVICE = os.environ.get("AZURE_SEARCH_SERVICE")
 AZURE_SEARCH_INDEX = os.environ.get("AZURE_SEARCH_INDEX")
 AZURE_SEARCH_KEY = os.environ.get("AZURE_SEARCH_KEY")
@@ -42,6 +65,9 @@ AZURE_OPENAI_STREAM = os.environ.get("AZURE_OPENAI_STREAM", "true")
 AZURE_OPENAI_MODEL_NAME = os.environ.get("AZURE_OPENAI_MODEL_NAME", "gpt-35-turbo") # Name of the model, e.g. 'gpt-35-turbo' or 'gpt-4'
 
 SHOULD_STREAM = True if AZURE_OPENAI_STREAM.lower() == "true" else False
+
+SHOW_SCORE_IN_RESULTS = os.environ.get("SHOW_SCORE_IN_RESULTS", "false")
+
 
 def is_chat_model():
     if 'gpt-4' in AZURE_OPENAI_MODEL_NAME.lower() or AZURE_OPENAI_MODEL_NAME.lower() in ['gpt-35-turbo-4k', 'gpt-35-turbo-16k']:
@@ -160,6 +186,53 @@ def conversation_with_data(request):
         else:
             return Response(None, mimetype='text/event-stream')
 
+
+def conversation_with_data_search(request):
+    
+    print(request.json["messages"])
+
+    query = request.json["messages"][-1]["content"]
+
+    print(query)
+    # Init Azure Search Client
+    search_client = SearchClient(
+        AZURE_SEARCH_SERVICE_ENDPOINT, AZURE_SEARCH_INDEX, AzureKeyCredential(AZURE_SEARCH_KEY))
+
+    results = search_client.search(
+        search_text=query,
+        #vector=Vector(value=generate_embeddings(
+        #    query), k=3, fields="contentVector"),
+        select=["title", "content", "category"],
+        query_type="semantic", query_language="en-us", semantic_configuration_name=AZURE_SEARCH_SEMANTIC_SEARCH_CONFIG, query_caption="extractive", query_answer="extractive",
+        top=3
+    )
+
+    semantic_answers = results.get_answers()
+    print(semantic_answers)
+    # Transform answer in a chatGPT JSON Model
+    content = ""
+    for answer in semantic_answers:
+        if answer.highlights:
+            print(f"Semantic Answer: {answer.highlights}")
+            content += answer.highlights 
+        else:
+            print(f"Semantic Answer: {answer.text}")
+            content += answer.text
+        print(f"Semantic Answer Score: {answer.score}\n")
+
+    for result in results:
+        print(f"Title: {result['title']}")
+        print(f"Content: {result['content']}")
+        print(f"Category: {result['category']}")
+
+        # Remobve HTML Code
+        content = re.sub("<[^>]+>", " ", content)
+        # Add Score 
+        if SHOW_SCORE_IN_RESULTS.lower() == "true":
+          content = content+"\n\n\n Score: "+str(answer.score)
+        
+        return json.dumps({"choices":[{"messages":[{"role":"assistant","content":content}]}]}).replace("\n", "\\n") + "\n"
+
 def stream_without_data(response):
     responseText = ""
     for line in response:
@@ -238,7 +311,8 @@ def conversation():
     try:
         use_data = should_use_data()
         if use_data:
-            return conversation_with_data(request)
+            #return conversation_with_data(request)
+            return conversation_with_data_search(request)
         else:
             return conversation_without_data(request)
     except Exception as e:
