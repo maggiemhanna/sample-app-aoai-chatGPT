@@ -38,6 +38,7 @@ def static_file(path):
     return app.send_static_file(path)
 
 # ACS Integration Settings
+# Set your Azure Search Endpoint starting with https://
 AZURE_SEARCH_SERVICE_ENDPOINT = os.environ.get("AZURE_SEARCH_SERVICE_ENDPOINT")
 AZURE_SEARCH_SERVICE = os.environ.get("AZURE_SEARCH_SERVICE")
 AZURE_SEARCH_INDEX = os.environ.get("AZURE_SEARCH_INDEX")
