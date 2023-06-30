@@ -51,6 +51,13 @@
                 "description": "Name of Azure Search Service"
             }
         },
+         "AzureSearchServiceEndpoint": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "URL starting with https:// of Azure Search Service"
+            }
+        },
         "AzureSearchIndex": {
             "type": "string",
             "defaultValue": "",
@@ -240,6 +247,10 @@
                         {
                             "name": "AZURE_SEARCH_SERVICE",
                             "value": "[parameters('AzureSearchService')]"
+                        },
+                        {
+                            "name": "AZURE_SEARCH_SERVICE_ENDPOINT",
+                            "value": "[parameters('AzureSearchServiceEndpoint')]"
                         },
                         {
                             "name": "AZURE_SEARCH_INDEX",
