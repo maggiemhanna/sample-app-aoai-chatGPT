@@ -65,7 +65,7 @@ AZURE_OPENAI_STREAM = os.environ.get("AZURE_OPENAI_STREAM", "true")
 AZURE_OPENAI_MODEL_NAME = os.environ.get("AZURE_OPENAI_MODEL_NAME", "gpt-35-turbo") # Name of the model, e.g. 'gpt-35-turbo' or 'gpt-4'
 
 SHOULD_STREAM = True if AZURE_OPENAI_STREAM.lower() == "true" else False
-
+# Display or not score in the UOI
 SHOW_SCORE_IN_RESULTS = os.environ.get("SHOW_SCORE_IN_RESULTS", "false")
 
 
