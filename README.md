@@ -105,7 +105,7 @@ Note: settings starting with `AZURE_SEARCH` are only needed when using Azure Ope
 | App Setting | Value | Note |
 | --- | --- | ------------- |
 |AZURE_SEARCH_SERVICE||The name of your Azure Cognitive Search resource|
-|AZURE_SEARCH_SERVICE_ENDPOINT|The URL starting with https:// of your Azure Cognitive Search Service| 
+|AZURE_SEARCH_SERVICE_ENDPOINT||The URL starting with https:// of your Azure Cognitive Search Service| 
 |AZURE_SEARCH_INDEX||The name of your Azure Cognitive Search Index|
 |AZURE_SEARCH_KEY||An **admin key** for your Azure Cognitive Search resource|
 |AZURE_SEARCH_USE_SEMANTIC_SEARCH|False|Whether or not to use semantic search|
