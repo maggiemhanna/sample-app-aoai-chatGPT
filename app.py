@@ -68,7 +68,6 @@ SHOULD_STREAM = True if AZURE_OPENAI_STREAM.lower() == "true" else False
 # Display or not score in the UI
 SHOW_SCORE_IN_RESULTS = os.environ.get("SHOW_SCORE_IN_RESULTS", "false")
 
-
 def is_chat_model():
     if 'gpt-4' in AZURE_OPENAI_MODEL_NAME.lower() or AZURE_OPENAI_MODEL_NAME.lower() in ['gpt-35-turbo-4k', 'gpt-35-turbo-16k']:
         return True
