@@ -135,10 +135,24 @@
                 "description": "Url column"
             }
         },
+        "AzureSearchContentVectorColumn": {
+            "type": "string",
+            "defaultValue": "contentVector",
+            "metadata": {
+                "description": "Embeddings"
+            }
+        },
         "AzureOpenAIResource": {
             "type": "string",
             "metadata": {
                 "description": "Name of Azure OpenAI Resource"
+            }
+        },
+         "AzureOpenAIEndpoint": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "URL starting with https:// of Azure OpenAI Service"
             }
         },
         "AzureOpenAIModel": {
@@ -296,6 +310,10 @@
                             "name": "AZURE_SEARCH_URL_COLUMN",
                             "value": "[parameters('AzureSearchUrlColumn')]"
                         },
+                         {
+                            "name": "AZURE_SEARCH_CONTENT_VECTOR_COLUMN",
+                            "value": "[parameters('AzureSearchContentVectorColumn')]"
+                        },
                         {
                             "name": "AZURE_OPENAI_RESOURCE",
                             "value": "[parameters('AzureOpenAIResource')]"
@@ -303,6 +321,10 @@
                         {
                             "name": "AZURE_OPENAI_MODEL",
                             "value": "[parameters('AzureOpenAIModel')]"
+                        },
+                        {
+                            "name": "AZURE_OPENAI_ENDPOINT",
+                            "value": "[parameters('AzureOpenAIEndpoint')]"
                         },
                         {
                             "name": "AZURE_OPENAI_KEY",
