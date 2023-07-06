@@ -1,4 +1,4 @@
--i https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-python/pypi/simple/
+--extra-index-url  https://pkgs.dev.azure.com/azure-sdk/public/_packaging/azure-sdk-for-python/pypi/simple/
 azure-identity==1.13.0b4
 Flask==2.3.2
 openai==0.27.7
