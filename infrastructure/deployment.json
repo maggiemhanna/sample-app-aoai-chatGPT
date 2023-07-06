@@ -161,6 +161,12 @@
                 "description": "Azure OpenAI Model Deployment Name"
             }
         },
+        "AzureEmbeddingEngine": {
+            "type": "string",
+            "metadata": {
+                "description": "Azure OpenAI Model for Embeddings"
+            }
+        },
         "AzureOpenAIModelName": {
             "type": "string",
             "defaultValue": "gpt-35-turbo",
@@ -321,6 +327,10 @@
                         {
                             "name": "AZURE_OPENAI_MODEL",
                             "value": "[parameters('AzureOpenAIModel')]"
+                        },
+                         {
+                            "name": "AZURE_EMBEDDING_ENGINE",
+                            "value": "[parameters('AzureEmbeddingEngine')]"
                         },
                         {
                             "name": "AZURE_OPENAI_ENDPOINT",
