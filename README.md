@@ -64,6 +64,7 @@ Please see the [section below](#add-an-identity-provider) for important informat
     - `AZURE_SEARCH_TITLE_COLUMN`
     - `AZURE_SEARCH_URL_COLUMN`
     - `AZURE_SEARCH_CONTENT_VECTOR_COLUMN`
+    - `AZURE_EMBEDDING_ENGINE`
 
 3. Start the app with `start.cmd`. This will build the frontend, install backend dependencies, and then start the app.
 4. You can see the local running app at http://127.0.0.1:5000.
@@ -119,6 +120,7 @@ Note: settings starting with `AZURE_SEARCH` are only needed when using Azure Ope
 |AZURE_SEARCH_TITLE_COLUMN||Field from your Azure Cognitive Search index that gives a relevant title or header for your data content to display in the UI.|
 |AZURE_SEARCH_URL_COLUMN||Field from your Azure Cognitive Search index that contains a URL for the document, e.g. an Azure Blob Storage URI. This value is not currently used.|
 |AZURE_SEARCH_CONTENT_VECTOR_COLUMN||Field containing embeddings|
+|AZURE_EMBEDDING_ENGINE||Engine to use for embeddings| 
 |AZURE_OPENAI_RESOURCE||the name of your Azure OpenAI resource|
 |AZURE_OPENAI_ENDPOINT||Endpoint starting with https of you Azure OpenAI resource|
 |AZURE_OPENAI_MODEL||The name of your model deployment|

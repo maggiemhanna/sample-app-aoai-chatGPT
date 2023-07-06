@@ -57,7 +57,7 @@ AZURE_SEARCH_FILENAME_COLUMN = os.environ.get("AZURE_SEARCH_FILENAME_COLUMN")
 AZURE_SEARCH_TITLE_COLUMN = os.environ.get("AZURE_SEARCH_TITLE_COLUMN")
 AZURE_SEARCH_URL_COLUMN = os.environ.get("AZURE_SEARCH_URL_COLUMN")
 AZURE_SEARCH_CONTENT_VECTOR_COLUMN = os.environ.get("AZURE_SEARCH_CONTENT_VECTOR_COLUMN")
-
+AZURE_EMBEDDING_ENGINE= os.environ.get("AZURE_EMBEDDING_ENGINE")
 
 # AOAI Integration Settings
 AZURE_OPENAI_RESOURCE = os.environ.get("AZURE_OPENAI_RESOURCE")
@@ -197,7 +197,7 @@ def generate_embeddings(text):
     print(openai.api_key)
     print(openai.api_base)
     response = openai.Embedding.create(
-        input=text, engine="ada")
+        input=text, engine=AZURE_EMBEDDING_ENGINE)
     embeddings = response['data'][0]['embedding']
     return embeddings
 
