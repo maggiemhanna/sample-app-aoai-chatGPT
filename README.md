@@ -52,6 +52,7 @@ Please see the [section below](#add-an-identity-provider) for important informat
     - `AZURE_SEARCH_INDEX`
     - `AZURE_SEARCH_KEY`
     - `AZURE_SEARCH_SERVICE_ENDPOINT`
+    - `AZURE_OPENAI_ENDPOINT`
 
     These variables are optional:
     - `AZURE_SEARCH_USE_SEMANTIC_SEARCH`
@@ -62,6 +63,7 @@ Please see the [section below](#add-an-identity-provider) for important informat
     - `AZURE_SEARCH_FILENAME_COLUMN`
     - `AZURE_SEARCH_TITLE_COLUMN`
     - `AZURE_SEARCH_URL_COLUMN`
+    - `AZURE_SEARCH_CONTENT_VECTOR_COLUMN`
 
 3. Start the app with `start.cmd`. This will build the frontend, install backend dependencies, and then start the app.
 4. You can see the local running app at http://127.0.0.1:5000.
@@ -116,7 +118,9 @@ Note: settings starting with `AZURE_SEARCH` are only needed when using Azure Ope
 |AZURE_SEARCH_FILENAME_COLUMN||`AZURE_SEARCH_FILENAME_COLUMN`: Field from your Azure Cognitive Search index that gives a unique idenitfier of the source of your data to display in the UI.|
 |AZURE_SEARCH_TITLE_COLUMN||Field from your Azure Cognitive Search index that gives a relevant title or header for your data content to display in the UI.|
 |AZURE_SEARCH_URL_COLUMN||Field from your Azure Cognitive Search index that contains a URL for the document, e.g. an Azure Blob Storage URI. This value is not currently used.|
+|AZURE_SEARCH_CONTENT_VECTOR_COLUMN||Field containing embeddings|
 |AZURE_OPENAI_RESOURCE||the name of your Azure OpenAI resource|
+|AZURE_OPENAI_ENDPOINT||Endpoint starting with https of you Azure OpenAI resource|
 |AZURE_OPENAI_MODEL||The name of your model deployment|
 |AZURE_OPENAI_MODEL_NAME|gpt-35-turbo|The name of the model|
 |AZURE_OPENAI_KEY||One of the API keys of your Azure OpenAI resource|
