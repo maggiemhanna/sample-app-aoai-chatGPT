@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from azure.core.credentials import AzureKeyCredential
 from azure.search.documents import SearchClient  
 from azure.search.documents.indexes import SearchIndexClient  
-#from azure.search.documents.models import Vector  
+from azure.search.documents.models import Vector  
 from azure.search.documents.indexes.models import (  
     SearchIndex,  
     SearchField,  
@@ -23,12 +23,17 @@ from azure.search.documents.indexes.models import (
     PrioritizedFields,  
     SemanticField,  
     SearchField,  
-    SemanticSettings  
-#    VectorSearch,  
-#    VectorSearchAlgorithmConfiguration,  
+    SemanticSettings,  
+    VectorSearch,  
+    VectorSearchAlgorithmConfiguration,  
 )
 
 load_dotenv()
+
+openai.api_type = "azure"
+openai.api_key = os.getenv("AZURE_OPENAI_KEY")  
+openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
+openai.api_version = "2023-03-15-preview"
 
 app = Flask(__name__)
 
@@ -51,6 +56,8 @@ AZURE_SEARCH_CONTENT_COLUMNS = os.environ.get("AZURE_SEARCH_CONTENT_COLUMNS")
 AZURE_SEARCH_FILENAME_COLUMN = os.environ.get("AZURE_SEARCH_FILENAME_COLUMN")
 AZURE_SEARCH_TITLE_COLUMN = os.environ.get("AZURE_SEARCH_TITLE_COLUMN")
 AZURE_SEARCH_URL_COLUMN = os.environ.get("AZURE_SEARCH_URL_COLUMN")
+AZURE_SEARCH_CONTENT_VECTOR_COLUMN = os.environ.get("AZURE_SEARCH_CONTENT_VECTOR_COLUMN")
+
 
 # AOAI Integration Settings
 AZURE_OPENAI_RESOURCE = os.environ.get("AZURE_OPENAI_RESOURCE")
@@ -186,6 +193,13 @@ def conversation_with_data(request):
         else:
             return Response(None, mimetype='text/event-stream')
 
+def generate_embeddings(text):
+    print(openai.api_key)
+    print(openai.api_base)
+    response = openai.Embedding.create(
+        input=text, engine="ada")
+    embeddings = response['data'][0]['embedding']
+    return embeddings
 
 def conversation_with_data_search(request):
     
@@ -200,9 +214,9 @@ def conversation_with_data_search(request):
 
     results = search_client.search(
         search_text=query,
-        #vector=Vector(value=generate_embeddings(
-        #    query), k=3, fields="contentVector"),
-        select=["title", "content", "category"],
+        vector=Vector(value=generate_embeddings(
+            query), k=3, fields=AZURE_SEARCH_CONTENT_VECTOR_COLUMN),
+        select=[AZURE_SEARCH_TITLE_COLUMN, AZURE_SEARCH_CONTENT_COLUMNS],
         query_type="semantic", query_language="en-us", semantic_configuration_name=AZURE_SEARCH_SEMANTIC_SEARCH_CONFIG, query_caption="extractive", query_answer="extractive",
         top=3
     )
@@ -221,10 +235,9 @@ def conversation_with_data_search(request):
         print(f"Semantic Answer Score: {answer.score}\n")
 
     for result in results:
-        print(f"Title: {result['title']}")
-        print(f"Content: {result['content']}")
-        print(f"Category: {result['category']}")
-
+        print(f"Title: {result[AZURE_SEARCH_TITLE_COLUMN]}")
+        print(f"Content: {result[AZURE_SEARCH_CONTENT_COLUMNS]}")
+        
         # Remobve HTML Code
         content = re.sub("<[^>]+>", " ", content)
         # Add Score 
