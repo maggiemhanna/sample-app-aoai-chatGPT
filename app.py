@@ -223,6 +223,7 @@ def conversation_with_data_search(request):
 
     semantic_answers = results.get_answers()
     print(semantic_answers)
+    
     # Transform answer in a chatGPT JSON Model
     content = ""
     for answer in semantic_answers:
