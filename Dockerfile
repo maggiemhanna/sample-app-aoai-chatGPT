@@ -10,15 +10,8 @@ COPY --chown=node:node ./static/ ./static
 WORKDIR /home/node/app/frontend
 RUN npm run build
   
-FROM python:3.9.7-alpine3.14  
-RUN apk add --no-cache --virtual .build-deps \  
-    build-base \  
-    libffi-dev \  
-    openssl-dev \  
-    curl \  
-    && apk add --no-cache \  
-    libpq \  
-    && pip install --no-cache-dir uwsgi  
+FROM python:3.9.7  
+RUN pip install --no-cache-dir uwsgi
   
 COPY requirements.txt /usr/src/app/  
 RUN pip install --no-cache-dir -r /usr/src/app/requirements.txt \  
