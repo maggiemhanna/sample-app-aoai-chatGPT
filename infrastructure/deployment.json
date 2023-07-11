@@ -231,7 +231,7 @@
         }
     },
     "variables": {
-        "WebAppImageName": "DOCKER|acrdemoopenai.azurecr.io/openai-llm-search:1.0"
+        "WebAppImageName": "DOCKER|seseacr.azurecr.io/semanticsearch:1.0"
     },
     "resources": [
         {
